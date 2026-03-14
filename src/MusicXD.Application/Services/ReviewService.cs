@@ -9,17 +9,20 @@ namespace MusicXD.Application.Services;
 public class ReviewService : IReviewService
 {
     private readonly IReviewRepository _reviewRepository;
+    private readonly ITrackRatingRepository _trackRatingRepository;
     private readonly IUserRepository _userRepository;
     private readonly IActivityFeedRepository _activityFeedRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public ReviewService(
         IReviewRepository reviewRepository,
+        ITrackRatingRepository trackRatingRepository,
         IUserRepository userRepository,
         IActivityFeedRepository activityFeedRepository,
         IUnitOfWork unitOfWork)
     {
         _reviewRepository = reviewRepository;
+        _trackRatingRepository = trackRatingRepository;
         _userRepository = userRepository;
         _activityFeedRepository = activityFeedRepository;
         _unitOfWork = unitOfWork;
@@ -71,7 +74,18 @@ public class ReviewService : IReviewService
 
     public async Task<TrackRatingResponse> RateTrackAsync(Guid userId, CreateTrackRatingRequest request, CancellationToken cancellationToken = default)
     {
+        var existing = await _trackRatingRepository.GetAsync(request.TrackId, userId, cancellationToken);
+
+        if (existing is not null)
+        {
+            var updated = TrackRating.Create(request.TrackId, userId, request.Rating);
+            await _trackRatingRepository.UpdateAsync(updated, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return new TrackRatingResponse(updated.TrackId, updated.UserId, updated.Rating, updated.CreatedAt);
+        }
+
         var rating = TrackRating.Create(request.TrackId, userId, request.Rating);
+        await _trackRatingRepository.AddAsync(rating, cancellationToken);
 
         var activity = ActivityFeed.Create(userId, ActivityType.TrackRated, request.TrackId);
         await _activityFeedRepository.AddAsync(activity, cancellationToken);

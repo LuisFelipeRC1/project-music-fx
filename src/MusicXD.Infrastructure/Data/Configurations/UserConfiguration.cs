@@ -17,15 +17,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(u => u.Email).IsUnique();
         builder.HasIndex(u => u.Username).IsUnique();
-
-        builder.HasMany(u => u.Followers)
-            .WithOne(f => f.Following)
-            .HasForeignKey(f => f.FollowingId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasMany(u => u.Following)
-            .WithOne(f => f.Follower)
-            .HasForeignKey(f => f.FollowerId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

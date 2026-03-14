@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<User>> SearchAsync(string query, CancellationToken cancellationToken = default)
         => await _context.Users
-            .Where(u => u.Username.Contains(query) || u.Email.Contains(query))
+            .Where(u => u.Username.Contains(query))
             .ToListAsync(cancellationToken);
 
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)

@@ -27,6 +27,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<ITrackRatingRepository, TrackRatingRepository>();
         services.AddScoped<IFollowRepository, FollowRepository>();
         services.AddScoped<IActivityFeedRepository, ActivityFeedRepository>();
         services.AddScoped<ITokenService, JwtTokenService>();
