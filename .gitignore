@@ -1,0 +1,26 @@
+# .NET Build outputs
+src/**/bin/
+src/**/obj/
+*.user
+
+# .NET Test results
+TestResults/
+
+# Environment variables
+.env
+*.env.local
+
+# IDE
+.vs/
+.idea/
+*.suo
+*.user
+
+# Secrets
+*.pfx
+*.p12
+secrets.json
+
+# OS
+.DS_Store
+Thumbs.db

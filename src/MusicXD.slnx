@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MusicXD.API/MusicXD.API.csproj" />
+  <Project Path="MusicXD.Application/MusicXD.Application.csproj" />
+  <Project Path="MusicXD.Domain/MusicXD.Domain.csproj" />
+  <Project Path="MusicXD.Infrastructure/MusicXD.Infrastructure.csproj" />
+</Solution>
