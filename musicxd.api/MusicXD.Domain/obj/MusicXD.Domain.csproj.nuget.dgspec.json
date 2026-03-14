@@ -10,7 +10,7 @@
         "projectUniqueName": "/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/MusicXD.Domain.csproj",
         "projectName": "MusicXD.Domain",
         "projectPath": "/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/MusicXD.Domain.csproj",
-        "packagesPath": "/home/runner/.nuget/packages/",
+        "packagesPath": "/tmp/codeql-scratch-4ffae786c78e46c3/dbs/csharp/working/packages",
         "outputPath": "/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -37,7 +37,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -53,12 +54,22 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.23, 8.0.23]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.23, 8.0.23]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.418/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

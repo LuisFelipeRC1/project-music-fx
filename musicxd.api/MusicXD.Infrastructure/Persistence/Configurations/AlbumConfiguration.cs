@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MusicXD.Domain.Entities;
+using System.Text.Json;
 
 namespace MusicXD.Infrastructure.Persistence.Configurations;
 
@@ -15,7 +16,7 @@ public class AlbumConfiguration : IEntityTypeConfiguration<Album>
         builder.HasOne(a => a.Artist).WithMany().HasForeignKey(a => a.ArtistId);
         builder.Property(a => a.Genres)
             .HasConversion(
-                v => string.Join(',', v),
-                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>());
     }
 }

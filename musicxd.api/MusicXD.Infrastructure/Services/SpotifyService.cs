@@ -50,7 +50,8 @@ public class SpotifyService : ISpotifyService
 
     private static TrackDto MapToTrackDto(SpotifyTrack track) => new()
     {
-        Id = Guid.NewGuid(),
+        // Id is intentionally empty — these are transient Spotify results, not persisted DB entities
+        Id = Guid.Empty,
         SpotifyId = track.Id ?? string.Empty,
         Title = track.Name ?? string.Empty,
         DurationMs = track.DurationMs
@@ -58,7 +59,8 @@ public class SpotifyService : ISpotifyService
 
     private static ArtistDto MapToArtistDto(SpotifyArtist artist) => new()
     {
-        Id = Guid.NewGuid(),
+        // Id is intentionally empty — these are transient Spotify results, not persisted DB entities
+        Id = Guid.Empty,
         SpotifyId = artist.Id ?? string.Empty,
         Name = artist.Name ?? string.Empty,
         Genres = artist.Genres ?? new List<string>()

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MusicXD.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cea971a899bd2089e381d8c0eb88716f8ce16e6b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0995af533a0415dc5a81123c0c51c1297d562c2b")]
 [assembly: System.Reflection.AssemblyProductAttribute("MusicXD.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MusicXD.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

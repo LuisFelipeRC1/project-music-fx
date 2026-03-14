@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "6gp2su7qibM=",
+  "dgSpecHash": "/7I410WDl08=",
   "success": true,
   "projectFilePath": "/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/MusicXD.Domain.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/tmp/codeql-scratch-4ffae786c78e46c3/dbs/csharp/working/packages/microsoft.netcore.app.ref/8.0.23/microsoft.netcore.app.ref.8.0.23.nupkg.sha512",
+    "/tmp/codeql-scratch-4ffae786c78e46c3/dbs/csharp/working/packages/microsoft.aspnetcore.app.ref/8.0.23/microsoft.aspnetcore.app.ref.8.0.23.nupkg.sha512"
+  ],
   "logs": []
 }

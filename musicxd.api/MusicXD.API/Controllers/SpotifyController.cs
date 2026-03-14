@@ -40,11 +40,14 @@ public class SpotifyController : ControllerBase
         return Ok(result);
     }
 
+    // Reads the Spotify OAuth access token from the X-Spotify-Token request header.
+    // This is separate from the JWT Bearer token used to authenticate with MusicXD.
     private string GetSpotifyAccessToken()
     {
-        var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+        var token = Request.Headers["X-Spotify-Token"].FirstOrDefault();
         return string.IsNullOrEmpty(token)
-            ? throw new UnauthorizedAccessException("No access token provided.")
+            ? throw new UnauthorizedAccessException("Spotify access token not provided in X-Spotify-Token header.")
             : token;
     }
 }
+
