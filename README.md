@@ -67,4 +67,3 @@ Users can discover new music through:
 
 MusicXD follows **Clean Architecture principles** and is designed to scale as the platform grows.
 
-## Architecture Overview
