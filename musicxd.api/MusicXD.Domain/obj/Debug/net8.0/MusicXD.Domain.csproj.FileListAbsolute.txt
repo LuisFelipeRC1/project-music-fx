@@ -1,0 +1,12 @@
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/bin/Debug/net8.0/MusicXD.Domain.deps.json
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/bin/Debug/net8.0/MusicXD.Domain.dll
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/bin/Debug/net8.0/MusicXD.Domain.pdb
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/Debug/net8.0/MusicXD.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/Debug/net8.0/MusicXD.Domain.AssemblyInfoInputs.cache
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/Debug/net8.0/MusicXD.Domain.AssemblyInfo.cs
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/Debug/net8.0/MusicXD.Domain.csproj.CoreCompileInputs.cache
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/Debug/net8.0/MusicXD.Domain.sourcelink.json
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/Debug/net8.0/MusicXD.Domain.dll
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/Debug/net8.0/refint/MusicXD.Domain.dll
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/Debug/net8.0/MusicXD.Domain.pdb
+/home/runner/work/project-music-fx/project-music-fx/musicxd.api/MusicXD.Domain/obj/Debug/net8.0/ref/MusicXD.Domain.dll
