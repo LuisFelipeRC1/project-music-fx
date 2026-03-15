@@ -1,0 +1,23 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+.vs/
+
+# Node
+node_modules/
+.next/
+musicxd.web/.next/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Docker volumes
+postgres_data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
