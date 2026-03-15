@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
 using MusicXD.Domain.Entities;
+using MusicXD.Domain.ValueObjects;
 
 namespace MusicXD.Application.Features.Auth.Commands;
 
@@ -65,7 +66,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
         {
             Id = user.Id,
             Username = user.Username,
-            Email = user.Email,
+            Email = user.Email.Value,
             CreatedAt = user.CreatedAt
         };
     }
