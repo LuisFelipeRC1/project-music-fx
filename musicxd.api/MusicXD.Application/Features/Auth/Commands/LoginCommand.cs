@@ -20,7 +20,15 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
 
     public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var email = new Email(request.Email);
+        Email email;
+        try
+        {
+            email = new Email(request.Email);
+        }
+        catch (ArgumentException)
+        {
+            throw new UnauthorizedAccessException("Invalid credentials.");
+        }
 
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == email, cancellationToken)
