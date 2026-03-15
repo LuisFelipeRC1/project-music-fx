@@ -1,145 +1,124 @@
-# 🎧 MusicXD
+# MusicXD
 
-MusicXD is a **social music discovery platform** inspired by Letterboxd, focused on helping users discover music through community activity.
+A social music discovery platform — rate songs, review albums, follow friends, and discover music through community activity.
 
-Users can rate songs, review albums, follow friends, and explore trending music across the platform.
+> Inspired by Letterboxd, built for music lovers.
 
-The goal of MusicXD is to combine **music discovery + social interaction** in a single product.
-
----
-
-# ✨ Features
-
-### 🎵 Music Reviews
-Users can:
-
-- Rate songs
-- Review albums
-- Share opinions about music
+[![CI](https://github.com/LuisFelipeRC1/project-music-fx/actions/workflows/ci.yml/badge.svg)](https://github.com/LuisFelipeRC1/project-music-fx/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
-### 👥 Social Network
-
-MusicXD allows users to:
-
-- Follow friends
-- View friends' listening activity
-- Like and comment on reviews
-- Discover music through community interaction
-
----
-
-### 📊 Music Leaderboards
-
-Users can explore:
-
-- Top Albums of the Month
-- Top Songs of the Week
-- Trending Artists
-- Friends' favorite tracks
-
----
-
-### 🔗 Spotify Integration
-
-MusicXD integrates with the Spotify Web API to:
-
-- Sync user listening history
-- Show top artists
-- Display most played tracks
-- Track recently played songs
-
----
-
-### 🔎 Music Discovery
-
-Users can discover new music through:
-
-- Friend activity
-- Community reviews
-- Trending charts
-- Personalized recommendations
-
----
-
-# 🏗 Architecture
-
-MusicXD follows **Clean Architecture principles** and is designed to scale as the platform grows.
-
-```
-project-music-fx/
-├── musicxd.api/              # .NET 8 Backend (Clean Architecture)
-│   ├── MusicXD.Domain/       # Entities, no dependencies
-│   │   └── Entities/         # User, Artist, Album, Track, AlbumReview, TrackReview, Follow, ActivityFeed
-│   ├── MusicXD.Application/  # Business logic, interfaces, DTOs
-│   │   ├── Features/         # CQRS commands & queries (MediatR)
-│   │   ├── DTOs/             # Data transfer objects
-│   │   └── Interfaces/       # IApplicationDbContext, ISpotifyService, IJwtTokenService
-│   ├── MusicXD.Infrastructure/ # EF Core, PostgreSQL, Redis, Spotify, JWT
-│   │   ├── Persistence/      # ApplicationDbContext + entity configurations
-│   │   ├── Services/         # SpotifyService, JwtTokenService
-│   │   ├── Caching/          # RedisCacheService
-│   │   └── Jobs/             # SpotifySyncJob (IHostedService)
-│   └── MusicXD.API/          # ASP.NET Core Web API
-│       ├── Controllers/      # Auth, AlbumReviews, TrackReviews, Users, Spotify
-│       └── Middleware/       # ExceptionHandlingMiddleware
-│
-├── musicxd.web/              # Next.js 14 Frontend (TypeScript + TailwindCSS)
-│   └── src/
-│       ├── app/              # App Router pages
-│       │   ├── page.tsx      # Home feed
-│       │   ├── login/        # Login page
-│       │   ├── register/     # Register page
-│       │   ├── album/[id]/   # Album detail + reviews
-│       │   ├── track/[id]/   # Track detail + ratings
-│       │   ├── profile/[id]/ # User profile
-│       │   ├── discover/     # Trending charts
-│       │   └── search/       # Search
-│       ├── components/       # Navbar, ActivityCard, ReviewCard, StarRating, AlbumCard, TrackCard
-│       ├── lib/api.ts        # Fetch-based API client
-│       └── types/index.ts    # TypeScript interfaces
-│
-├── docker-compose.yml        # PostgreSQL + Redis + API + Web
-├── .env.example              # Environment variables template
-└── .github/workflows/ci.yml  # GitHub Actions CI
-```
-
----
-
-# 🚀 Getting Started
-
-### Prerequisites
-- [Docker](https://www.docker.com/) & Docker Compose
-- OR: [.NET 8 SDK](https://dotnet.microsoft.com/download) + [Node.js 20+](https://nodejs.org/)
-
-### Run with Docker Compose
+## Quick Start
 
 ```bash
+# 1. Clone and configure
+git clone https://github.com/LuisFelipeRC1/project-music-fx.git
+cd project-music-fx
 cp .env.example .env
-# Edit .env with your Spotify API credentials and JWT secret
+# Edit .env — add your Spotify API credentials and a JWT secret
+
+# 2. Start all services
 docker-compose up
 ```
 
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
-- Swagger UI: http://localhost:5000/swagger
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:5000 |
+| Swagger UI | http://localhost:5000/swagger |
 
-### Run locally (without Docker)
-
-**Backend:**
+**Without Docker:**
 ```bash
-cd musicxd.api
-dotnet restore
-dotnet run --project MusicXD.API
-```
+# Backend
+cd musicxd.api && dotnet run --project MusicXD.API
 
-**Frontend:**
-```bash
-cd musicxd.web
-npm install
-npm run dev
+# Frontend
+cd musicxd.web && npm install && npm run dev
 ```
 
 ---
 
+## Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 15, React 18, TypeScript, Tailwind CSS, shadcn/ui |
+| Backend | .NET 8, ASP.NET Core, Clean Architecture, CQRS/MediatR |
+| Database | PostgreSQL 16 |
+| Cache | Redis 7 |
+| Auth | JWT Bearer |
+| Music data | Spotify Web API |
+| Deploy | Vercel (frontend) + Railway (backend) |
+
+---
+
+## Features
+
+- **Music Reviews** — Rate and review albums and tracks (1–5 stars)
+- **Social Feed** — Follow friends and see their listening activity
+- **Music Discovery** — Trending charts, friend activity, community picks
+- **Spotify Integration** — Sync artists, albums, and tracks from Spotify
+
+---
+
+## Project Structure
+
+```
+project-music-fx/
+├── musicxd.api/          # .NET 8 backend (Clean Architecture)
+│   ├── MusicXD.Domain/       # Entities — no external dependencies
+│   ├── MusicXD.Application/  # CQRS use cases, DTOs, interfaces
+│   ├── MusicXD.Infrastructure/ # EF Core, Redis, Spotify, JWT
+│   └── MusicXD.API/          # Controllers, middleware, DI setup
+│
+├── musicxd.web/          # Next.js 15 frontend
+│   └── src/
+│       ├── app/              # App Router pages
+│       ├── components/       # UI components (shadcn/ui + custom)
+│       ├── lib/api.ts        # Typed API client
+│       └── types/            # Shared TypeScript interfaces
+│
+├── .github/
+│   ├── workflows/            # CI, CD frontend, CD backend, commitlint
+│   └── ISSUE_TEMPLATE/       # Bug, feature, task, tech-debt templates
+│
+├── docs/                 # Full project documentation
+└── docker-compose.yml    # Local development environment
+```
+
+---
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute — setup, git flow, PR process |
+| [docs/GIT_FLOW.md](docs/GIT_FLOW.md) | Branching strategy, Conventional Commits, release process |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design, ADRs, domain model |
+| [docs/CI_CD.md](docs/CI_CD.md) | CI/CD pipelines and deployment guide |
+| [docs/standards/BACKEND_STANDARDS.md](docs/standards/BACKEND_STANDARDS.md) | C# naming, CQRS patterns, EF Core rules |
+| [docs/standards/FRONTEND_STANDARDS.md](docs/standards/FRONTEND_STANDARDS.md) | TypeScript/React patterns, component structure |
+| [docs/standards/CODE_REVIEW.md](docs/standards/CODE_REVIEW.md) | Code review checklist |
+| [docs/design-system/OVERVIEW.md](docs/design-system/OVERVIEW.md) | Design system philosophy |
+| [docs/design-system/TOKENS.md](docs/design-system/TOKENS.md) | Color palette, typography, spacing |
+| [docs/design-system/COMPONENTS.md](docs/design-system/COMPONENTS.md) | UI component catalog |
+| [SECURITY.md](SECURITY.md) | Security policy and vulnerability reporting |
+| [CHANGELOG.md](CHANGELOG.md) | Version history |
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
+
+**Quick reference:**
+- Branch: `feature/<issue-id>-<slug>` off `main`
+- Commits: [Conventional Commits](docs/GIT_FLOW.md#conventional-commits) enforced on PRs
+- PRs: CI must pass, use the PR template
+
+---
+
+## License
+
+[MIT](LICENSE) © MusicXD Contributors

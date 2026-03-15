@@ -1,0 +1,24 @@
+meta {
+  name: Get User Profile
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/users/{{userId}}/profile
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+vars:pre-request {
+  userId: 00000000-0000-0000-0000-000000000001
+}
+
+docs {
+  Returns the profile for a given user, including follower/following counts and recent reviews.
+  Requires authentication.
+}

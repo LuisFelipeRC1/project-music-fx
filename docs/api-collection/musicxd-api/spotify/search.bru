@@ -1,0 +1,26 @@
+meta {
+  name: Search Spotify
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/spotify/search
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+params:query {
+  q: radiohead
+  type: album
+}
+
+docs {
+  Searches the Spotify catalog for artists, albums, or tracks.
+  Requires authentication.
+  `type` can be: artist, album, track
+}

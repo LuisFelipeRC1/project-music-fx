@@ -1,0 +1,29 @@
+meta {
+  name: Create Track Review
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/trackreviews
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "trackId": "00000000-0000-0000-0000-000000000001",
+    "rating": 4,
+    "reviewText": "Great track, love the production."
+  }
+}
+
+docs {
+  Creates a new track review.
+  Requires authentication.
+  Rating must be between 1 and 5.
+}
