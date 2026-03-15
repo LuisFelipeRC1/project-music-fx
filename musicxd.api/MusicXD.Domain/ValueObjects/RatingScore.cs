@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace MusicXD.Domain.ValueObjects;
 
 public sealed record RatingScore
@@ -12,5 +14,5 @@ public sealed record RatingScore
         Value = decimal.Round(value, 1, MidpointRounding.AwayFromZero);
     }
 
-    public override string ToString() => Value.ToString("0.0");
+    public override string ToString() => Value.ToString("0.0", CultureInfo.InvariantCulture);
 }
