@@ -13,7 +13,7 @@ public class AlbumConfiguration : IEntityTypeConfiguration<Album>
         builder.Property(a => a.SpotifyId).IsRequired().HasMaxLength(100);
         builder.HasIndex(a => a.SpotifyId).IsUnique();
         builder.Property(a => a.Title).IsRequired().HasMaxLength(500);
-        builder.HasOne(a => a.Artist).WithMany().HasForeignKey(a => a.ArtistId);
+        builder.HasOne<Artist>().WithMany().HasForeignKey(a => a.ArtistId);
         builder.Property(a => a.Genres)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),

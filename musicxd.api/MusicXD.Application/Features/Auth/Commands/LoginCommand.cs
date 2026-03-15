@@ -1,5 +1,6 @@
 using MediatR;
 using MusicXD.Application.Interfaces;
+using MusicXD.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace MusicXD.Application.Features.Auth.Commands;
@@ -19,8 +20,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
 
     public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
+        var email = new Email(request.Email);
+
         var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken)
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken)
             ?? throw new UnauthorizedAccessException("Invalid credentials.");
 
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))

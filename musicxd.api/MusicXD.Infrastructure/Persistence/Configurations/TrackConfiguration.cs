@@ -12,6 +12,6 @@ public class TrackConfiguration : IEntityTypeConfiguration<Track>
         builder.Property(t => t.SpotifyId).IsRequired().HasMaxLength(100);
         builder.HasIndex(t => t.SpotifyId).IsUnique();
         builder.Property(t => t.Title).IsRequired().HasMaxLength(500);
-        builder.HasOne(t => t.Album).WithMany().HasForeignKey(t => t.AlbumId);
+        builder.HasOne<Album>().WithMany().HasForeignKey(t => t.AlbumId);
     }
 }

@@ -18,19 +18,26 @@ public class GetTrackReviewsQueryHandler : IRequestHandler<GetTrackReviewsQuery,
 
     public async Task<IEnumerable<TrackReviewDto>> Handle(GetTrackReviewsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.TrackReviews
-            .Include(r => r.User)
-            .Where(r => r.TrackId == request.TrackId)
-            .Select(r => new TrackReviewDto
+        var reviews = await (
+            from review in _context.TrackReviews
+            join user in _context.Users on review.UserId equals user.Id
+            where review.TrackId == request.TrackId
+            select new
             {
-                Id = r.Id,
-                UserId = r.UserId,
-                Username = r.User.Username,
-                TrackId = r.TrackId,
-                Rating = r.Rating,
-                Content = r.Content,
-                CreatedAt = r.CreatedAt
+                Review = review,
+                Username = user.Username
             })
             .ToListAsync(cancellationToken);
+
+        return reviews.Select(item => new TrackReviewDto
+        {
+            Id = item.Review.Id,
+            UserId = item.Review.UserId,
+            Username = item.Username,
+            TrackId = item.Review.TrackId,
+            Rating = item.Review.Rating.Value,
+            Content = item.Review.Content,
+            CreatedAt = item.Review.CreatedAt
+        });
     }
 }

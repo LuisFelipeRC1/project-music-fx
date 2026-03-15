@@ -10,7 +10,7 @@ public class FollowConfiguration : IEntityTypeConfiguration<Follow>
     {
         builder.HasKey(f => f.Id);
         builder.HasIndex(f => new { f.FollowerId, f.FolloweeId }).IsUnique();
-        builder.HasOne(f => f.Follower).WithMany().HasForeignKey(f => f.FollowerId).OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(f => f.Followee).WithMany().HasForeignKey(f => f.FolloweeId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<User>().WithMany().HasForeignKey(f => f.FollowerId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<User>().WithMany().HasForeignKey(f => f.FolloweeId).OnDelete(DeleteBehavior.Restrict);
     }
 }

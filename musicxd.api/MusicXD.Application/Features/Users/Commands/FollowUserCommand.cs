@@ -2,6 +2,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.Interfaces;
 using MusicXD.Domain.Entities;
+using MusicXD.Domain.Enums;
+using ActivityFeedEntry = MusicXD.Domain.Entities.ActivityFeed;
 
 namespace MusicXD.Application.Features.Users.Commands;
 
@@ -24,15 +26,13 @@ public class FollowUserCommandHandler : IRequestHandler<FollowUserCommand, Unit>
         if (alreadyFollowing)
             return Unit.Value;
 
-        var follow = new Follow
-        {
-            Id = Guid.NewGuid(),
-            FollowerId = request.FollowerId,
-            FolloweeId = request.FolloweeId,
-            CreatedAt = DateTime.UtcNow
-        };
+        var follow = new Follow(request.FollowerId, request.FolloweeId);
 
         _context.Follows.Add(follow);
+        _context.ActivityFeeds.Add(new ActivityFeedEntry(
+            request.FollowerId,
+            ActivityType.UserFollowed,
+            request.FolloweeId.ToString()));
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
