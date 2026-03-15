@@ -22,22 +22,19 @@ public class GetTrackReviewsQueryHandler : IRequestHandler<GetTrackReviewsQuery,
             from review in _context.TrackReviews
             join user in _context.Users on review.UserId equals user.Id
             where review.TrackId == request.TrackId
-            select new
+            select new TrackReviewDto
             {
-                Review = review,
-                Username = user.Username
+                Id = review.Id,
+                UserId = review.UserId,
+                Username = user.Username,
+                TrackId = review.TrackId,
+                Rating = review.Rating.Value,
+                Content = review.Content,
+                CreatedAt = review.CreatedAt
             })
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
 
-        return reviews.Select(item => new TrackReviewDto
-        {
-            Id = item.Review.Id,
-            UserId = item.Review.UserId,
-            Username = item.Username,
-            TrackId = item.Review.TrackId,
-            Rating = item.Review.Rating.Value,
-            Content = item.Review.Content,
-            CreatedAt = item.Review.CreatedAt
-        });
+        return reviews;
     }
 }
