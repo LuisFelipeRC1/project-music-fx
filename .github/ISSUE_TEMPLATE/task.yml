@@ -1,0 +1,53 @@
+name: "📋 Task"
+description: Tarefa técnica de desenvolvimento
+labels: ["task"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição
+      description: O que precisa ser feito e por quê?
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceite (Definition of Done)
+      description: Liste o que precisa estar pronto para esta tarefa ser considerada concluída
+      placeholder: |
+        - [ ] ...
+        - [ ] Testes adicionados
+        - [ ] Documentação atualizada (se necessário)
+        - [ ] CI verde
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical
+    attributes:
+      label: Notas técnicas
+      description: Detalhes de implementação, arquivos relevantes, decisões a tomar
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Frontend
+        - Backend
+        - DevOps
+        - Documentação
+        - Testes
+        - Design System
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridade
+      options:
+        - Alta
+        - Média
+        - Baixa

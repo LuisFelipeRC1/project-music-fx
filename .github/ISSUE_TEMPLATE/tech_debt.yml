@@ -1,0 +1,47 @@
+name: "🔧 Tech Debt"
+description: Débito técnico a ser resolvido
+labels: ["tech-debt"]
+body:
+  - type: textarea
+    id: current
+    attributes:
+      label: Situação atual (problema)
+      description: Descreva o problema técnico atual e por que ele é um débito
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução proposta
+      description: Como esse débito deve ser resolvido?
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impacto se não resolvido
+      description: O que acontece se este débito continuar acumulando?
+    validations:
+      required: true
+
+  - type: textarea
+    id: files
+    attributes:
+      label: Arquivos / áreas afetadas
+      description: Liste os arquivos, módulos ou áreas do código afetados
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Frontend
+        - Backend
+        - Infraestrutura
+        - Testes
+        - Segurança
+        - Performance
+    validations:
+      required: true

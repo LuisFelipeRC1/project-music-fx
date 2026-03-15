@@ -1,0 +1,59 @@
+name: "🐛 Bug Report"
+description: Reportar um bug no sistema
+labels: ["bug", "needs-triage"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição do bug
+      description: O que aconteceu?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Como reproduzir
+      description: Passos para reproduzir o comportamento
+      placeholder: |
+        1. Vá para '...'
+        2. Clique em '...'
+        3. Veja o erro
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento esperado
+      description: O que deveria acontecer?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Frontend
+        - Backend
+        - API
+        - Autenticação
+        - Spotify Integration
+        - DevOps
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Ambiente
+      placeholder: "ex: produção, staging, local"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Informações adicionais
+      description: Screenshots, logs, ou qualquer outra informação relevante

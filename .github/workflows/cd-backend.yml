@@ -1,0 +1,30 @@
+name: CD Backend (Railway)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "musicxd.api/**"
+      - ".github/workflows/cd-backend.yml"
+
+jobs:
+  deploy:
+    name: Deploy to Railway
+    runs-on: ubuntu-latest
+    environment: production
+    # RAILWAY_TOKEN at job level so the CLI is authenticated for all steps.
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy to Railway
+        run: railway up --service ${{ secrets.RAILWAY_SERVICE_NAME }}
+        working-directory: ./musicxd.api

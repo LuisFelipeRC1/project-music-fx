@@ -1,0 +1,22 @@
+# CODEOWNERS — MusicXD
+# Each line specifies a pattern and one or more owners.
+# Owners are automatically requested for review on PRs that touch matching files.
+# Replace @your-github-username with the actual GitHub usernames.
+
+# Default owner for everything
+* @your-github-username
+
+# Backend (.NET API)
+/musicxd.api/ @your-github-username
+
+# Frontend (Next.js)
+/musicxd.web/ @your-github-username
+
+# Infrastructure and CI/CD
+/.github/ @your-github-username
+/docker-compose.yml @your-github-username
+/.env.example @your-github-username
+
+# Documentation
+/docs/ @your-github-username
+/CONTRIBUTING.md @your-github-username
