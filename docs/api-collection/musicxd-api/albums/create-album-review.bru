@@ -1,0 +1,30 @@
+meta {
+  name: Create Album Review
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/albumreviews
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "albumId": "00000000-0000-0000-0000-000000000001",
+    "rating": 5,
+    "reviewText": "An absolute masterpiece from start to finish."
+  }
+}
+
+docs {
+  Creates a new album review.
+  Requires authentication.
+  Rating must be between 1 and 5.
+  reviewText is optional (max 2000 characters).
+}

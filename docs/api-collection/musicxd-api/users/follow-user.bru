@@ -1,0 +1,25 @@
+meta {
+  name: Follow User
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/users/{{userId}}/follow
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+vars:pre-request {
+  userId: 00000000-0000-0000-0000-000000000001
+}
+
+docs {
+  Follows the specified user.
+  Requires authentication.
+  The authenticated user will follow the user identified by `userId`.
+}

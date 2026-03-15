@@ -1,0 +1,24 @@
+meta {
+  name: Get Album Reviews
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/albumreviews?albumId={{albumId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+params:query {
+  albumId: 00000000-0000-0000-0000-000000000001
+}
+
+docs {
+  Returns all reviews for a given album.
+  Requires authentication.
+}
