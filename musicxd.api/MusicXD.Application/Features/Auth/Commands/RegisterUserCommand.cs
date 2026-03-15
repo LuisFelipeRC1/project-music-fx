@@ -2,6 +2,7 @@ using MediatR;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
 using MusicXD.Domain.Entities;
+using MusicXD.Domain.ValueObjects;
 
 namespace MusicXD.Application.Features.Auth.Commands;
 
@@ -18,15 +19,10 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
 
     public async Task<UserDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var user = new User
-        {
-            Id = Guid.NewGuid(),
-            Username = request.Username,
-            Email = request.Email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+        var user = new User(
+            request.Username,
+            new Email(request.Email),
+            BCrypt.Net.BCrypt.HashPassword(request.Password));
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync(cancellationToken);
@@ -35,7 +31,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
         {
             Id = user.Id,
             Username = user.Username,
-            Email = user.Email,
+            Email = user.Email.Value,
             CreatedAt = user.CreatedAt
         };
     }

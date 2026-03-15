@@ -2,6 +2,9 @@ using MediatR;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
 using MusicXD.Domain.Entities;
+using MusicXD.Domain.Enums;
+using MusicXD.Domain.ValueObjects;
+using ActivityFeedEntry = MusicXD.Domain.Entities.ActivityFeed;
 
 namespace MusicXD.Application.Features.AlbumReviews.Commands;
 
@@ -18,18 +21,17 @@ public class CreateAlbumReviewCommandHandler : IRequestHandler<CreateAlbumReview
 
     public async Task<AlbumReviewDto> Handle(CreateAlbumReviewCommand request, CancellationToken cancellationToken)
     {
-        var review = new AlbumReview
-        {
-            Id = Guid.NewGuid(),
-            UserId = request.UserId,
-            AlbumId = request.AlbumId,
-            Rating = request.Rating,
-            Content = request.Content,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+        var review = new AlbumReview(
+            request.UserId,
+            request.AlbumId,
+            new RatingScore(request.Rating),
+            request.Content);
 
         _context.AlbumReviews.Add(review);
+        _context.ActivityFeeds.Add(new ActivityFeedEntry(
+            request.UserId,
+            ActivityType.AlbumReviewed,
+            review.Content));
         await _context.SaveChangesAsync(cancellationToken);
 
         return new AlbumReviewDto
@@ -37,7 +39,7 @@ public class CreateAlbumReviewCommandHandler : IRequestHandler<CreateAlbumReview
             Id = review.Id,
             UserId = review.UserId,
             AlbumId = review.AlbumId,
-            Rating = review.Rating,
+            Rating = review.Rating.Value,
             Content = review.Content,
             CreatedAt = review.CreatedAt
         };
