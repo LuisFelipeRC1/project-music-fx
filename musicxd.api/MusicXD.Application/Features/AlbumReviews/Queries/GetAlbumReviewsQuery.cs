@@ -19,25 +19,21 @@ public class GetAlbumReviewsQueryHandler : IRequestHandler<GetAlbumReviewsQuery,
     public async Task<IEnumerable<AlbumReviewDto>> Handle(GetAlbumReviewsQuery request, CancellationToken cancellationToken)
     {
         var reviews = await (
-            from review in _context.AlbumReviews
+            from review in _context.AlbumReviews.AsNoTracking()
             join user in _context.Users on review.UserId equals user.Id
             where review.AlbumId == request.AlbumId
-            select new
+            select new AlbumReviewDto
             {
-                Review = review,
-                Username = user.Username
+                Id = review.Id,
+                UserId = review.UserId,
+                Username = user.Username,
+                AlbumId = review.AlbumId,
+                Rating = review.Rating.Value,
+                Content = review.Content,
+                CreatedAt = review.CreatedAt
             })
             .ToListAsync(cancellationToken);
 
-        return reviews.Select(item => new AlbumReviewDto
-        {
-            Id = item.Review.Id,
-            UserId = item.Review.UserId,
-            Username = item.Username,
-            AlbumId = item.Review.AlbumId,
-            Rating = item.Review.Rating.Value,
-            Content = item.Review.Content,
-            CreatedAt = item.Review.CreatedAt
-        });
+        return reviews;
     }
 }
