@@ -10,8 +10,8 @@ public interface IApplicationDbContext
     DbSet<Album> Albums { get; }
     DbSet<Track> Tracks { get; }
     DbSet<AlbumReview> AlbumReviews { get; }
-    DbSet<TrackReview> TrackReviews { get; }
+    DbSet<TrackRating> TrackRatings { get; }
     DbSet<Follow> Follows { get; }
-    DbSet<ActivityFeed> ActivityFeeds { get; }
+    DbSet<Activity> Activities { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -3,38 +3,36 @@ using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
 
-namespace MusicXD.Application.Features.TrackReviews.Queries;
+namespace MusicXD.Application.Features.TrackRatings.Queries;
 
-public record GetTrackReviewsQuery(Guid TrackId) : IRequest<IEnumerable<TrackReviewDto>>;
+public record GetTrackRatingsQuery(Guid TrackId) : IRequest<IEnumerable<TrackRatingDto>>;
 
-public class GetTrackReviewsQueryHandler : IRequestHandler<GetTrackReviewsQuery, IEnumerable<TrackReviewDto>>
+public class GetTrackRatingsQueryHandler : IRequestHandler<GetTrackRatingsQuery, IEnumerable<TrackRatingDto>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetTrackReviewsQueryHandler(IApplicationDbContext context)
+    public GetTrackRatingsQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<TrackReviewDto>> Handle(GetTrackReviewsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TrackRatingDto>> Handle(GetTrackRatingsQuery request, CancellationToken cancellationToken)
     {
-        var reviews = await (
-            from review in _context.TrackReviews
-            join user in _context.Users on review.UserId equals user.Id
-            where review.TrackId == request.TrackId
-            select new TrackReviewDto
-            {
-                Id = review.Id,
-                UserId = review.UserId,
-                Username = user.Username,
-                TrackId = review.TrackId,
-                Rating = review.Rating.Value,
-                Content = review.Content,
-                CreatedAt = review.CreatedAt
-            })
-            .AsNoTracking()
+        var ratings = await (
+            from rating in _context.TrackRatings.AsNoTracking()
+            join user in _context.Users on rating.UserId equals user.Id
+            where rating.TrackId == request.TrackId
+            select new { rating, user })
             .ToListAsync(cancellationToken);
 
-        return reviews;
+        return ratings.Select(result => new TrackRatingDto
+        {
+            Id = result.rating.Id,
+            UserId = result.rating.UserId,
+            Username = result.user.Username.Value,
+            TrackId = result.rating.TrackId,
+            Rating = result.rating.Rating.Value,
+            CreatedAt = result.rating.CreatedAt
+        });
     }
 }

@@ -1,36 +1,37 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MusicXD.Application.Features.TrackReviews.Commands;
-using MusicXD.Application.Features.TrackReviews.Queries;
+using MusicXD.Application.Features.TrackRatings.Commands;
+using MusicXD.Application.Features.TrackRatings.Queries;
 
 namespace MusicXD.API.Controllers;
 
 [ApiController]
+[Route("api/tracks/{trackId}/ratings")]
 [Route("api/tracks/{trackId}/reviews")]
-public class TrackReviewsController : ControllerBase
+public class TrackRatingsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public TrackReviewsController(IMediator mediator)
+    public TrackRatingsController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetReviews(Guid trackId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetRatings(Guid trackId, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetTrackReviewsQuery(trackId), cancellationToken);
+        var result = await _mediator.Send(new GetTrackRatingsQuery(trackId), cancellationToken);
         return Ok(result);
     }
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateReview(Guid trackId, [FromBody] CreateTrackReviewRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateRating(Guid trackId, [FromBody] CreateTrackRatingRequest request, CancellationToken cancellationToken)
     {
         var userId = GetUserId();
-        var result = await _mediator.Send(new CreateTrackReviewCommand(userId, trackId, request.Rating, request.Content), cancellationToken);
-        return CreatedAtAction(nameof(GetReviews), new { trackId }, result);
+        var result = await _mediator.Send(new CreateTrackRatingCommand(userId, trackId, request.Rating), cancellationToken);
+        return CreatedAtAction(nameof(GetRatings), new { trackId }, result);
     }
 
     private Guid GetUserId()
@@ -42,4 +43,4 @@ public class TrackReviewsController : ControllerBase
     }
 }
 
-public record CreateTrackReviewRequest(decimal Rating, string Content);
+public record CreateTrackRatingRequest(decimal Rating);

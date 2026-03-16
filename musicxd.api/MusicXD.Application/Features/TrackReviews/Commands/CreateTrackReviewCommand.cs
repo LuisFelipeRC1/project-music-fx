@@ -1,47 +1,52 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
 using MusicXD.Domain.Entities;
 using MusicXD.Domain.Enums;
 using MusicXD.Domain.ValueObjects;
-using ActivityFeedEntry = MusicXD.Domain.Entities.ActivityFeed;
+using ActivityEntry = MusicXD.Domain.Entities.Activity;
 
-namespace MusicXD.Application.Features.TrackReviews.Commands;
+namespace MusicXD.Application.Features.TrackRatings.Commands;
 
-public record CreateTrackReviewCommand(Guid UserId, Guid TrackId, decimal Rating, string Content) : IRequest<TrackReviewDto>;
+public record CreateTrackRatingCommand(Guid UserId, Guid TrackId, decimal Rating) : IRequest<TrackRatingDto>;
 
-public class CreateTrackReviewCommandHandler : IRequestHandler<CreateTrackReviewCommand, TrackReviewDto>
+public class CreateTrackRatingCommandHandler : IRequestHandler<CreateTrackRatingCommand, TrackRatingDto>
 {
     private readonly IApplicationDbContext _context;
 
-    public CreateTrackReviewCommandHandler(IApplicationDbContext context)
+    public CreateTrackRatingCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<TrackReviewDto> Handle(CreateTrackReviewCommand request, CancellationToken cancellationToken)
+    public async Task<TrackRatingDto> Handle(CreateTrackRatingCommand request, CancellationToken cancellationToken)
     {
-        var review = new TrackReview(
+        var alreadyRated = await _context.TrackRatings
+            .AnyAsync(rating => rating.UserId == request.UserId && rating.TrackId == request.TrackId, cancellationToken);
+
+        if (alreadyRated)
+            throw new InvalidOperationException("A user can only rate the same track once.");
+
+        var rating = new TrackRating(
             request.UserId,
             request.TrackId,
-            new RatingScore(request.Rating),
-            request.Content);
+            new Rating(request.Rating));
 
-        _context.TrackReviews.Add(review);
-        _context.ActivityFeeds.Add(new ActivityFeedEntry(
+        _context.TrackRatings.Add(rating);
+        _context.Activities.Add(new ActivityEntry(
             request.UserId,
             ActivityType.TrackRated,
-            review.Content));
+            rating.Id.ToString()));
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new TrackReviewDto
+        return new TrackRatingDto
         {
-            Id = review.Id,
-            UserId = review.UserId,
-            TrackId = review.TrackId,
-            Rating = review.Rating.Value,
-            Content = review.Content,
-            CreatedAt = review.CreatedAt
+            Id = rating.Id,
+            UserId = rating.UserId,
+            TrackId = rating.TrackId,
+            Rating = rating.Rating.Value,
+            CreatedAt = rating.CreatedAt
         };
     }
 }

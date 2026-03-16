@@ -14,9 +14,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Album> Albums => Set<Album>();
     public DbSet<Track> Tracks => Set<Track>();
     public DbSet<AlbumReview> AlbumReviews => Set<AlbumReview>();
-    public DbSet<TrackReview> TrackReviews => Set<TrackReview>();
+    public DbSet<TrackRating> TrackRatings => Set<TrackRating>();
     public DbSet<Follow> Follows => Set<Follow>();
-    public DbSet<ActivityFeed> ActivityFeeds => Set<ActivityFeed>();
+    public DbSet<Activity> Activities => Set<Activity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,9 +25,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         modelBuilder.ApplyConfiguration(new AlbumConfiguration());
         modelBuilder.ApplyConfiguration(new TrackConfiguration());
         modelBuilder.ApplyConfiguration(new AlbumReviewConfiguration());
-        modelBuilder.ApplyConfiguration(new TrackReviewConfiguration());
+        modelBuilder.ApplyConfiguration(new TrackRatingConfiguration());
         modelBuilder.ApplyConfiguration(new FollowConfiguration());
-        modelBuilder.ApplyConfiguration(new ActivityFeedConfiguration());
+        modelBuilder.ApplyConfiguration(new ActivityConfiguration());
         base.OnModelCreating(modelBuilder);
     }
 }
