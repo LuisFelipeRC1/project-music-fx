@@ -22,18 +22,18 @@ public class GetAlbumReviewsQueryHandler : IRequestHandler<GetAlbumReviewsQuery,
             from review in _context.AlbumReviews.AsNoTracking()
             join user in _context.Users on review.UserId equals user.Id
             where review.AlbumId == request.AlbumId
-            select new AlbumReviewDto
-            {
-                Id = review.Id,
-                UserId = review.UserId,
-                Username = user.Username,
-                AlbumId = review.AlbumId,
-                Rating = review.Rating.Value,
-                Content = review.Content,
-                CreatedAt = review.CreatedAt
-            })
+            select new { review, user })
             .ToListAsync(cancellationToken);
 
-        return reviews;
+        return reviews.Select(result => new AlbumReviewDto
+        {
+            Id = result.review.Id,
+            UserId = result.review.UserId,
+            Username = result.user.Username.Value,
+            AlbumId = result.review.AlbumId,
+            Rating = result.review.Rating.Value,
+            Content = result.review.ReviewText.Value,
+            CreatedAt = result.review.CreatedAt
+        });
     }
 }

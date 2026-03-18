@@ -5,5 +5,5 @@ namespace MusicXD.Domain.Events;
 public sealed record UserFollowed(
     Guid FollowId,
     Guid FollowerId,
-    Guid FolloweeId,
+    Guid FollowingId,
     DateTime OccurredAt) : IDomainEvent;

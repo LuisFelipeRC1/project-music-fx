@@ -1,32 +1,32 @@
+using MusicXD.Domain.Abstractions;
+using MusicXD.Domain.Events;
 using MusicXD.Domain.ValueObjects;
 
 namespace MusicXD.Domain.Entities;
 
-public class TrackReview
+public class TrackRating : Entity
 {
     public Guid Id { get; private set; }
     public Guid UserId { get; private set; }
     public Guid TrackId { get; private set; }
-    public RatingScore Rating { get; private set; } = null!;
-    public string Content { get; private set; } = string.Empty;
+    public Rating Rating { get; private set; } = null!;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
-    public TrackReview(Guid userId, Guid trackId, RatingScore rating, string content)
+    public TrackRating(Guid userId, Guid trackId, Rating rating)
     {
         Id = Guid.NewGuid();
         UserId = ValidateForeignKey(userId, nameof(userId));
         TrackId = ValidateForeignKey(trackId, nameof(trackId));
         Rating = rating ?? throw new ArgumentNullException(nameof(rating));
-        Content = ValidateContent(content);
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = CreatedAt;
+        RaiseDomainEvent(new TrackRated(Id, UserId, TrackId, Rating.Value, CreatedAt));
     }
 
-    public void UpdateReview(RatingScore rating, string content)
+    public void UpdateRating(Rating rating)
     {
         Rating = rating ?? throw new ArgumentNullException(nameof(rating));
-        Content = ValidateContent(content);
         UpdatedAt = DateTime.UtcNow;
     }
 
@@ -38,18 +38,5 @@ public class TrackReview
         return value;
     }
 
-    private static string ValidateContent(string content)
-    {
-        if (string.IsNullOrWhiteSpace(content))
-            throw new ArgumentException("content cannot be empty.", nameof(content));
-
-        var normalized = content.Trim();
-
-        if (normalized.Length > 5000)
-            throw new ArgumentException("content cannot be longer than 5000 characters.", nameof(content));
-
-        return normalized;
-    }
-
-    private TrackReview() { }
+    private TrackRating() { }
 }

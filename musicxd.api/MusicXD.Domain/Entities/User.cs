@@ -1,36 +1,40 @@
+using MusicXD.Domain.Abstractions;
+using MusicXD.Domain.Events;
 using MusicXD.Domain.ValueObjects;
 
 namespace MusicXD.Domain.Entities;
 
-public class User
+public class User : Entity
 {
     public Guid Id { get; private set; }
-    public string Username { get; private set; } = string.Empty;
+    public Username Username { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
-    public string PasswordHash { get; private set; } = string.Empty;
+    public PasswordHash PasswordHash { get; private set; } = null!;
     public string? Bio { get; private set; }
     public string? ProfileImageUrl { get; private set; }
-    public string? SpotifyUserId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
+    public List<Follow> Followers { get; private set; } = new();
+    public List<Follow> Following { get; private set; } = new();
+    public List<AlbumReview> AlbumReviews { get; private set; } = new();
+    public List<TrackRating> TrackRatings { get; private set; } = new();
 
     public User(
-        string username,
+        Username username,
         Email email,
-        string passwordHash,
+        PasswordHash passwordHash,
         string? bio = null,
-        string? profileImageUrl = null,
-        string? spotifyUserId = null)
+        string? profileImageUrl = null)
     {
         Id = Guid.NewGuid();
-        Username = ValidateRequired(username, nameof(username), 100);
+        Username = username ?? throw new ArgumentNullException(nameof(username));
         Email = email ?? throw new ArgumentNullException(nameof(email));
-        PasswordHash = ValidateRequired(passwordHash, nameof(passwordHash));
+        PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
         Bio = NormalizeOptional(bio, 1000, nameof(bio));
         ProfileImageUrl = NormalizeOptional(profileImageUrl, 2048, nameof(profileImageUrl));
-        SpotifyUserId = NormalizeOptional(spotifyUserId, 200, nameof(spotifyUserId));
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = CreatedAt;
+        RaiseDomainEvent(new UserRegistered(Id, CreatedAt));
     }
 
     public void UpdateProfile(string? bio, string? profileImageUrl)
@@ -40,34 +44,15 @@ public class User
         Touch();
     }
 
-    public void LinkSpotifyAccount(string spotifyUserId)
+    public void ChangePassword(PasswordHash passwordHash)
     {
-        SpotifyUserId = ValidateRequired(spotifyUserId, nameof(spotifyUserId), 200);
-        Touch();
-    }
-
-    public void ChangePassword(string passwordHash)
-    {
-        PasswordHash = ValidateRequired(passwordHash, nameof(passwordHash));
+        PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
         Touch();
     }
 
     private void Touch()
     {
         UpdatedAt = DateTime.UtcNow;
-    }
-
-    private static string ValidateRequired(string value, string paramName, int? maxLength = null)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException($"{paramName} cannot be empty.", paramName);
-
-        var normalized = value.Trim();
-
-        if (maxLength.HasValue && normalized.Length > maxLength.Value)
-            throw new ArgumentException($"{paramName} cannot be longer than {maxLength.Value} characters.", paramName);
-
-        return normalized;
     }
 
     private static string? NormalizeOptional(string? value, int maxLength, string paramName)

@@ -10,13 +10,19 @@ public class AlbumReviewConfiguration : IEntityTypeConfiguration<AlbumReview>
     public void Configure(EntityTypeBuilder<AlbumReview> builder)
     {
         builder.HasKey(r => r.Id);
+        builder.HasIndex(r => new { r.UserId, r.AlbumId }).IsUnique();
         builder.Property(r => r.Rating)
             .HasConversion(
                 rating => rating.Value,
-                value => new RatingScore(value))
+                value => new Rating(value))
             .HasPrecision(3, 1);
-        builder.Property(r => r.Content).IsRequired().HasMaxLength(5000);
-        builder.HasOne<User>().WithMany().HasForeignKey(r => r.UserId);
-        builder.HasOne<Album>().WithMany().HasForeignKey(r => r.AlbumId);
+        builder.Property(r => r.ReviewText)
+            .HasConversion(
+                reviewText => reviewText.Value,
+                value => new ReviewText(value))
+            .IsRequired()
+            .HasMaxLength(5000);
+        builder.HasOne<User>().WithMany(user => user.AlbumReviews).HasForeignKey(r => r.UserId);
+        builder.HasOne<Album>().WithMany(album => album.Reviews).HasForeignKey(r => r.AlbumId);
     }
 }

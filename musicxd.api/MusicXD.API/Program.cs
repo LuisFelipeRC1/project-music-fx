@@ -17,6 +17,8 @@ var requiredConfig = new[]
     ("Jwt:Audience",                        "JWT audience"),
     ("ConnectionStrings:DefaultConnection", "PostgreSQL connection string"),
     ("ConnectionStrings:Redis",             "Redis connection string"),
+    ("Spotify:ClientId",                    "Spotify client id"),
+    ("Spotify:ClientSecret",                "Spotify client secret"),
 };
 
 var configErrors = requiredConfig
@@ -28,7 +30,7 @@ if (configErrors.Count > 0)
 {
     throw new InvalidOperationException(
         $"Missing required configuration values:\n{string.Join("\n", configErrors)}\n" +
-        "Check your .env file or environment variables. See .env.example for reference.");
+        "Configure them via environment variables, launchSettings.json, User Secrets, or Docker Compose.");
 }
 
 builder.Services.AddControllers();

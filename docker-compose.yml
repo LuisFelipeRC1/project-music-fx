@@ -43,6 +43,8 @@ services:
       Jwt__Secret: "${JWT_SECRET:-change-me-in-production-use-a-long-random-string}"
       Jwt__Issuer: "musicxd-api"
       Jwt__Audience: "musicxd-web"
+      Spotify__ClientId: "${Spotify__ClientId}"
+      Spotify__ClientSecret: "${Spotify__ClientSecret}"
 
   web:
     build:

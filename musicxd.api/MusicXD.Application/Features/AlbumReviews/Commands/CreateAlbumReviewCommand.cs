@@ -1,10 +1,11 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
 using MusicXD.Domain.Entities;
 using MusicXD.Domain.Enums;
 using MusicXD.Domain.ValueObjects;
-using ActivityFeedEntry = MusicXD.Domain.Entities.ActivityFeed;
+using ActivityEntry = MusicXD.Domain.Entities.Activity;
 
 namespace MusicXD.Application.Features.AlbumReviews.Commands;
 
@@ -21,17 +22,23 @@ public class CreateAlbumReviewCommandHandler : IRequestHandler<CreateAlbumReview
 
     public async Task<AlbumReviewDto> Handle(CreateAlbumReviewCommand request, CancellationToken cancellationToken)
     {
+        var alreadyReviewed = await _context.AlbumReviews
+            .AnyAsync(review => review.UserId == request.UserId && review.AlbumId == request.AlbumId, cancellationToken);
+
+        if (alreadyReviewed)
+            throw new ArgumentException("A user can only review the same album once.");
+
         var review = new AlbumReview(
             request.UserId,
             request.AlbumId,
-            new RatingScore(request.Rating),
-            request.Content);
+            new Rating(request.Rating),
+            new ReviewText(request.Content));
 
         _context.AlbumReviews.Add(review);
-        _context.ActivityFeeds.Add(new ActivityFeedEntry(
+        _context.Activities.Add(new ActivityEntry(
             request.UserId,
             ActivityType.AlbumReviewed,
-            review.Content));
+            review.Id.ToString()));
         await _context.SaveChangesAsync(cancellationToken);
 
         return new AlbumReviewDto
@@ -40,7 +47,7 @@ public class CreateAlbumReviewCommandHandler : IRequestHandler<CreateAlbumReview
             UserId = review.UserId,
             AlbumId = review.AlbumId,
             Rating = review.Rating.Value,
-            Content = review.Content,
+            Content = review.ReviewText.Value,
             CreatedAt = review.CreatedAt
         };
     }

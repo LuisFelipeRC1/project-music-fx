@@ -25,7 +25,7 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, U
         return new UserDto
         {
             Id = user.Id,
-            Username = user.Username,
+            Username = user.Username.Value,
             Email = user.Email.Value,
             Bio = user.Bio,
             ProfileImageUrl = user.ProfileImageUrl,

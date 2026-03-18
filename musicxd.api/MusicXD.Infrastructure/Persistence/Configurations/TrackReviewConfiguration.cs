@@ -5,18 +5,18 @@ using MusicXD.Domain.ValueObjects;
 
 namespace MusicXD.Infrastructure.Persistence.Configurations;
 
-public class TrackReviewConfiguration : IEntityTypeConfiguration<TrackReview>
+public class TrackRatingConfiguration : IEntityTypeConfiguration<TrackRating>
 {
-    public void Configure(EntityTypeBuilder<TrackReview> builder)
+    public void Configure(EntityTypeBuilder<TrackRating> builder)
     {
         builder.HasKey(r => r.Id);
+        builder.HasIndex(r => new { r.UserId, r.TrackId }).IsUnique();
         builder.Property(r => r.Rating)
             .HasConversion(
                 rating => rating.Value,
-                value => new RatingScore(value))
+                value => new Rating(value))
             .HasPrecision(3, 1);
-        builder.Property(r => r.Content).IsRequired().HasMaxLength(5000);
-        builder.HasOne<User>().WithMany().HasForeignKey(r => r.UserId);
-        builder.HasOne<Track>().WithMany().HasForeignKey(r => r.TrackId);
+        builder.HasOne<User>().WithMany(user => user.TrackRatings).HasForeignKey(r => r.UserId);
+        builder.HasOne<Track>().WithMany(track => track.Ratings).HasForeignKey(r => r.TrackId);
     }
 }

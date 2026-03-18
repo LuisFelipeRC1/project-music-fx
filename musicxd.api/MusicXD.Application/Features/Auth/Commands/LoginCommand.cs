@@ -34,7 +34,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
             .FirstOrDefaultAsync(u => u.Email == email, cancellationToken)
             ?? throw new UnauthorizedAccessException("Invalid credentials.");
 
-        if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash.Value))
             throw new UnauthorizedAccessException("Invalid credentials.");
 
         return _jwtTokenService.GenerateToken(user);

@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.Interfaces;
 using MusicXD.Domain.Entities;
 using MusicXD.Domain.Enums;
-using ActivityFeedEntry = MusicXD.Domain.Entities.ActivityFeed;
+using ActivityEntry = MusicXD.Domain.Entities.Activity;
 
 namespace MusicXD.Application.Features.Users.Commands;
 
-public record FollowUserCommand(Guid FollowerId, Guid FolloweeId) : IRequest<Unit>;
+public record FollowUserCommand(Guid FollowerId, Guid FollowingId) : IRequest<Unit>;
 
 public class FollowUserCommandHandler : IRequestHandler<FollowUserCommand, Unit>
 {
@@ -21,18 +21,18 @@ public class FollowUserCommandHandler : IRequestHandler<FollowUserCommand, Unit>
     public async Task<Unit> Handle(FollowUserCommand request, CancellationToken cancellationToken)
     {
         var alreadyFollowing = await _context.Follows
-            .AnyAsync(f => f.FollowerId == request.FollowerId && f.FolloweeId == request.FolloweeId, cancellationToken);
+            .AnyAsync(f => f.FollowerId == request.FollowerId && f.FollowingId == request.FollowingId, cancellationToken);
 
         if (alreadyFollowing)
             return Unit.Value;
 
-        var follow = new Follow(request.FollowerId, request.FolloweeId);
+        var follow = new Follow(request.FollowerId, request.FollowingId);
 
         _context.Follows.Add(follow);
-        _context.ActivityFeeds.Add(new ActivityFeedEntry(
+        _context.Activities.Add(new ActivityEntry(
             request.FollowerId,
             ActivityType.UserFollowed,
-            request.FolloweeId.ToString()));
+            request.FollowingId.ToString()));
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
