@@ -26,7 +26,7 @@ public class CreateAlbumReviewCommandHandler : IRequestHandler<CreateAlbumReview
             .AnyAsync(review => review.UserId == request.UserId && review.AlbumId == request.AlbumId, cancellationToken);
 
         if (alreadyReviewed)
-            throw new ArgumentException("A user can only review the same album once.");
+            throw new InvalidOperationException("A user can only review the same album once.");
 
         var review = new AlbumReview(
             request.UserId,
