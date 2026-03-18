@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
+using MusicXD.Application.Mapper;
 
 namespace MusicXD.Application.Features.ActivityFeed.Queries;
 
@@ -24,13 +25,6 @@ public class GetActivityFeedQueryHandler : IRequestHandler<GetActivityFeedQuery,
             .OrderByDescending(a => a.CreatedAt)
             .ToListAsync(cancellationToken);
 
-        return activities.Select(activity => new ActivityFeedDto
-        {
-            Id = activity.Id,
-            UserId = activity.UserId,
-            EventType = activity.Type.ToString(),
-            Payload = activity.Payload,
-            CreatedAt = activity.CreatedAt
-        });
+        return activities.Select(activity => activity.ToActivityFeedDto());
     }
 }
