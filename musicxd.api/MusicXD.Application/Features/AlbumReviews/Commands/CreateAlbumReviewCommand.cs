@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
+using MusicXD.Application.Mapper;
 using MusicXD.Domain.Entities;
 using MusicXD.Domain.Enums;
 using MusicXD.Domain.ValueObjects;
@@ -41,14 +42,6 @@ public class CreateAlbumReviewCommandHandler : IRequestHandler<CreateAlbumReview
             review.Id.ToString()));
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new AlbumReviewDto
-        {
-            Id = review.Id,
-            UserId = review.UserId,
-            AlbumId = review.AlbumId,
-            Rating = review.Rating.Value,
-            Content = review.ReviewText.Value,
-            CreatedAt = review.CreatedAt
-        };
+        return review.ToAlbumReviewDto();
     }
 }

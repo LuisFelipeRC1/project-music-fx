@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
+using MusicXD.Application.Mapper;
 using MusicXD.Domain.Entities;
 using MusicXD.Domain.ValueObjects;
 
@@ -47,12 +48,6 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
         _context.Users.Add(user);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new UserDto
-        {
-            Id = user.Id,
-            Username = user.Username.Value,
-            Email = user.Email.Value,
-            CreatedAt = user.CreatedAt
-        };
+        return user.ToUserDto();
     }
 }

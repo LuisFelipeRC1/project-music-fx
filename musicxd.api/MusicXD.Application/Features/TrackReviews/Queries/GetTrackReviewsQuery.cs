@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
+using MusicXD.Application.Mapper;
 
 namespace MusicXD.Application.Features.TrackRatings.Queries;
 
@@ -25,14 +26,6 @@ public class GetTrackRatingsQueryHandler : IRequestHandler<GetTrackRatingsQuery,
             select new { rating, user })
             .ToListAsync(cancellationToken);
 
-        return ratings.Select(result => new TrackRatingDto
-        {
-            Id = result.rating.Id,
-            UserId = result.rating.UserId,
-            Username = result.user.Username.Value,
-            TrackId = result.rating.TrackId,
-            Rating = result.rating.Rating.Value,
-            CreatedAt = result.rating.CreatedAt
-        });
+        return ratings.Select(result => result.rating.ToTrackRatingDto(result.user.Username.Value));
     }
 }

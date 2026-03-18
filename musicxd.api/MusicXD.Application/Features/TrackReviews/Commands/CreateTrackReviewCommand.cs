@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
+using MusicXD.Application.Mapper;
 using MusicXD.Domain.Entities;
 using MusicXD.Domain.Enums;
 using MusicXD.Domain.ValueObjects;
@@ -41,13 +42,6 @@ public class CreateTrackRatingCommandHandler : IRequestHandler<CreateTrackRating
             rating.Id.ToString()));
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new TrackRatingDto
-        {
-            Id = rating.Id,
-            UserId = rating.UserId,
-            TrackId = rating.TrackId,
-            Rating = rating.Rating.Value,
-            CreatedAt = rating.CreatedAt
-        };
+        return rating.ToTrackRatingDto();
     }
 }

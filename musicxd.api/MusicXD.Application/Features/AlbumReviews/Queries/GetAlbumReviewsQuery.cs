@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
 using MusicXD.Application.Interfaces;
+using MusicXD.Application.Mapper;
 
 namespace MusicXD.Application.Features.AlbumReviews.Queries;
 
@@ -25,15 +26,6 @@ public class GetAlbumReviewsQueryHandler : IRequestHandler<GetAlbumReviewsQuery,
             select new { review, user })
             .ToListAsync(cancellationToken);
 
-        return reviews.Select(result => new AlbumReviewDto
-        {
-            Id = result.review.Id,
-            UserId = result.review.UserId,
-            Username = result.user.Username.Value,
-            AlbumId = result.review.AlbumId,
-            Rating = result.review.Rating.Value,
-            Content = result.review.ReviewText.Value,
-            CreatedAt = result.review.CreatedAt
-        });
+        return reviews.Select(result => result.review.ToAlbumReviewDto(result.user.Username.Value));
     }
 }
