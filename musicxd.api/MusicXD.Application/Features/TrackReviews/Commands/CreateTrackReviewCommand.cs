@@ -1,3 +1,4 @@
+using System;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MusicXD.Application.DTOs;
@@ -26,7 +27,7 @@ public class CreateTrackRatingCommandHandler : IRequestHandler<CreateTrackRating
             .AnyAsync(rating => rating.UserId == request.UserId && rating.TrackId == request.TrackId, cancellationToken);
 
         if (alreadyRated)
-            throw new InvalidOperationException("A user can only rate the same track once.");
+            throw new ArgumentException("A user can only rate the same track once.", nameof(request.TrackId));
 
         var rating = new TrackRating(
             request.UserId,
